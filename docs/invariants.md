@@ -136,19 +136,7 @@ Execution boundaries are defined exclusively by durable state transitions.
 
 ---
 
-## 5. Allowed State Transitions
-
-- A logical input may transition only through the following states, in order:
-  - **ACKNOWLEDGED**
-  - **COMMITTED** or **REJECTED**
-
-- Once an input reaches a **COMMITTED** or **REJECTED** state, it must never transition to any other truth state.
-
-- Backward or lateral truth-state transitions are forbidden.
-
----
-
-## 6. Boundary Observability
+## 5 . Boundary Observability
 
 - All execution boundary states must be determinable from persisted state alone.
 
@@ -157,7 +145,7 @@ Execution boundaries are defined exclusively by durable state transitions.
 If an execution boundary cannot be observed from durable state, it is considered unenforced and invalid.
 
 
-## State Transition Invariants
+# State Transition Invariants
 
 - A logical input may exist only in one of the following states:
   - ACKNOWLEDGED
@@ -181,7 +169,7 @@ If an execution boundary cannot be observed from durable state, it is considered
 - COMMITTED and REJECTED are terminal states and must never be reversed.
 
 
-## Idempotency Invariants
+# Idempotency Invariants
 
 - Acknowledgement of a logical input must be safe to repeat.
 
