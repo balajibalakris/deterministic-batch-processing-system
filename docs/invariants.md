@@ -84,3 +84,74 @@ These elements may exist as metadata or audit attributes but must not influence 
 
 If an invariant can be violated silently, it is considered unenforced and therefore invalid.
 Any invariant violation must result in an explicit, inspectable failure state.
+
+
+# Execution Boundary Invariants
+
+These invariants specify when a logical input is acknowledged, committed, or rejected,
+independent of execution flow, retries, or job success.
+
+Execution boundaries are defined exclusively by durable state transitions.
+
+---
+
+## 1. Acknowledgement Boundary
+
+- A logical input is not considered **acknowledged** until its logical identity is durably recorded by the system.
+
+- Acknowledgement represents the system accepting responsibility for deciding the input,
+  not accepting the truth of the input.
+
+- Validation, correctness checks, or execution success must not determine acknowledgement.
+
+---
+
+## 2. Commitment Boundary
+
+- An assertion is not considered **committed** until its authoritative state is fully and durably persisted.
+
+- Execution completion, job success, or in-memory state must not be treated as commitment.
+
+- Commitment is an irreversible transition that establishes system truth.
+
+---
+
+## 3. Partial State Prohibition
+
+- It must be impossible for a partially committed assertion to be observable to any consumer.
+
+- Either the authoritative assertion state exists in full, or it does not exist at all.
+
+- No downstream logic may rely on intermediate or transient execution states.
+
+---
+
+## 4. Failure Boundary
+
+- Execution success without a committed state transition must not change the system’s belief about any input.
+
+- Execution failure prior to commitment must leave system truth unchanged.
+
+- All failures that prevent commitment must be explicitly representable as a rejection state.
+
+---
+
+## 5. Allowed State Transitions
+
+- A logical input may transition only through the following states, in order:
+  - **ACKNOWLEDGED**
+  - **COMMITTED** or **REJECTED**
+
+- Once an input reaches a **COMMITTED** or **REJECTED** state, it must never transition to any other truth state.
+
+- Backward or lateral truth-state transitions are forbidden.
+
+---
+
+## 6. Boundary Observability
+
+- All execution boundary states must be determinable from persisted state alone.
+
+- Logs, batch job executions, timestamps, or external systems must not be required to determine truth.
+
+If an execution boundary cannot be observed from durable state, it is considered unenforced and invalid.
