@@ -179,3 +179,18 @@ If an execution boundary cannot be observed from durable state, it is considered
   Once a logical input leaves a state, it must never re-enter that state.
 
 - COMMITTED and REJECTED are terminal states and must never be reversed.
+
+
+## Idempotency Invariants
+
+- Acknowledgement of a logical input must be safe to repeat.
+
+- Applying the same logical input more than once must not create multiple authoritative committed assertions.
+
+- For a given logical identity, at most one committed assertion may exist.
+
+- Commitment of authoritative truth must be a single-occurrence operation and must never be duplicated under retries.
+
+- Idempotency must be enforced at the persistence boundary where authoritative state is written.
+
+- Input ingestion and output generation may be repeated arbitrarily, provided they do not alter committed truth.
