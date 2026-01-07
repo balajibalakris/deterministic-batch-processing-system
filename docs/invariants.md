@@ -155,3 +155,27 @@ Execution boundaries are defined exclusively by durable state transitions.
 - Logs, batch job executions, timestamps, or external systems must not be required to determine truth.
 
 If an execution boundary cannot be observed from durable state, it is considered unenforced and invalid.
+
+
+## State Transition Invariants
+
+- A logical input may exist only in one of the following states:
+  - ACKNOWLEDGED
+  - COMMITTED
+  - REJECTED
+
+- The only allowed state transitions are:
+  - ACKNOWLEDGED → COMMITTED
+  - ACKNOWLEDGED → REJECTED
+
+- No other state transitions are permitted.
+
+- It must be impossible for a logical input to transition:
+  - from COMMITTED to any other state
+  - from REJECTED to any other state
+  - directly to COMMITTED or REJECTED without first being ACKNOWLEDGED
+
+- State transitions must be monotonic.
+  Once a logical input leaves a state, it must never re-enter that state.
+
+- COMMITTED and REJECTED are terminal states and must never be reversed.
