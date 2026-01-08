@@ -200,3 +200,81 @@ If an execution boundary cannot be observed from durable state, it is considered
   - the execution boundary reached
   - whether authoritative truth was committed
   - whether reprocessing is safe or forbidden
+
+---
+
+# Reprocessing Invariants
+
+- Reprocessing is allowed only when it cannot create, alter, or overwrite an existing authoritative committed assertion.
+
+- Reprocessing is permitted when a logical input is in one of the following states:
+  - ACKNOWLEDGED but not COMMITTED
+  - explicitly REJECTED
+  - deterministically classified as duplicate, correction, or conflict
+
+- Reprocessing must never silently mutate or replace committed authoritative truth.
+
+- All reprocessing attempts must resolve to the same logical identity classification given the same persisted state.
+
+---
+
+# Preservation and Immutability
+
+- The following must be preserved across all executions and reprocessing attempts:
+  - logical identity
+  - acknowledgement records
+  - all state transitions
+  - classification outcomes (duplicate, correction, conflict, rejection)
+
+- Once a logical identity is acknowledged, it must never change.
+
+- Once an authoritative assertion is COMMITTED or REJECTED, that historical record must be immutable.
+
+- Historical state transitions must never be deleted, overwritten, or rewritten.
+
+---
+
+# Audit & Accountability Invariants
+
+- The system must persist sufficient evidence to reconstruct:
+  - what authoritative assertions were made
+  - by which reporting authority
+  - for which subject
+  - under which rule and rule version
+  - for which reporting period
+  - and what final and historical states they reached
+
+- The system must persist data sufficient to establish:
+  - **who** asserted or acted (authority context)
+  - **when** each state transition occurred
+  - **why** an input was rejected, corrected, or classified as conflicting
+
+- Any information required to justify or defend a decision must be persisted at the time of decision.
+
+- The system must not rely on logs, batch execution history, or external systems to reconstruct authoritative truth.
+
+---
+
+# Human Interaction Invariants
+
+- Operators may:
+  - trigger retries or reprocessing
+  - inspect system state
+  - initiate explicit correction workflows
+
+- Operators must never:
+  - directly modify authoritative committed assertions
+  - delete or overwrite historical records
+  - force state transitions outside defined invariants
+
+- It must be technically impossible to:
+  - create duplicate committed assertions for the same logical identity
+  - overwrite or bypass authoritative truth
+  - resurrect rejected or committed inputs into earlier states
+
+- The system must prevent, not merely warn about:
+  - duplicate identity acknowledgement
+  - duplicate authoritative assertion commitment
+  - silent overwrite of committed truth
+
+---
