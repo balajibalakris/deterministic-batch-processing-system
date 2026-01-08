@@ -183,7 +183,7 @@ If an execution boundary cannot be observed from durable state, it is considered
 
 - Input ingestion and output generation may be repeated arbitrarily, provided they do not alter committed truth.
 
-## Failure Visibility Invariants
+# Failure Visibility Invariants
 
 - Failures are acceptable only if they leave the system in a state where no authoritative truth is ambiguous.
 
