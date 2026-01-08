@@ -182,3 +182,21 @@ If an execution boundary cannot be observed from durable state, it is considered
 - Idempotency must be enforced at the persistence boundary where authoritative state is written.
 
 - Input ingestion and output generation may be repeated arbitrarily, provided they do not alter committed truth.
+
+## Failure Visibility Invariants
+
+- Failures are acceptable only if they leave the system in a state where no authoritative truth is ambiguous.
+
+- Failure before acknowledgement must leave no logical input recorded.
+
+- Failure after acknowledgement but before commitment must leave the logical input in an acknowledged or explicitly rejected state.
+
+- Failures that occur during or threaten authoritative commitment must be loud and blocking.
+
+- It must be impossible for a failure to result in partially committed or ambiguously committed truth.
+
+- For every failure, the system must persist sufficient information to determine:
+  - the affected logical identity (if any)
+  - the execution boundary reached
+  - whether authoritative truth was committed
+  - whether reprocessing is safe or forbidden
