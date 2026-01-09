@@ -278,3 +278,5 @@ If an execution boundary cannot be observed from durable state, it is considered
   - silent overwrite of committed truth
 
 ---
+
+These invariants will be the guiding principles in building the appilication end to end.
