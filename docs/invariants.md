@@ -1,4 +1,4 @@
-# System Invariants
+# System Invariants 
 
 This document defines non-negotiable invariants for the batch processing system.
 These invariants describe what must remain true regardless of execution order,
