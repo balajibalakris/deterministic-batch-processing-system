@@ -49,7 +49,7 @@ The focus is correctness, determinism, and operational confidence — not throug
 > If a batch ran unattended and the data is questioned later,  
 > can the system prove what happened and safely recover?
 
-If the answer is not provably yes, the system is considered incorrect.
+If the answer is not provably yes, the system is considered incorrect. 
 
 ---
 
